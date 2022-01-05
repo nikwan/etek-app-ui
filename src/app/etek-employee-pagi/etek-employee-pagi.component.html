@@ -1,0 +1,81 @@
+<h4 style="color: rgb(187, 122, 25); font-weight: bolder;">Search with server side pagination with Angular Material!</h4>
+
+<img alt="etek image2" src="./assets/em2.png"/>
+
+<!-- <Label>Search Input</Label><input id="searchInput" type="text" [value]="searchInput" /> -->
+<!-- <Label>Search Input</Label><input  #searchInput  type="text" /> -->
+
+<section>
+<mat-form-field appearance="outline">
+  <mat-label onblur="ss">Search By First Name</mat-label>
+<input matInput  [(ngModel)]="searchInput" type="text" placeholder="enter company name" (blur)="searchBlur()">
+</mat-form-field>
+
+<p>
+  <button mat-raised-button color="primary" (click)="searchWithServerPagi()">Search</button>
+</p>
+
+</section>
+<div *ngIf="showPages">
+<mat-table [dataSource]="dataSource" matSort>
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+    </ng-container>
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
+      </ng-container>
+      <!-- Company Column -->
+    <ng-container matColumnDef="company">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Company </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.companyName}} </mat-cell>
+      </ng-container>
+      <!-- Salary Column -->
+      <ng-container matColumnDef="salary">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Salary </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.salary}} </mat-cell>
+      </ng-container>  
+      <!-- Email Column -->
+      <ng-container matColumnDef="email">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.email}} </mat-cell>
+      </ng-container>  
+      <!-- Update Column -->
+      <ng-container matColumnDef="update">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Update </mat-header-cell>
+        
+        <mat-cell *matCellDef="let row">
+        <button mat-raised-button color="primary" (click)="updateEmployee(row.id)">Update</button>
+      </mat-cell>
+      </ng-container> 
+      <!-- Delete Column -->
+      <ng-container matColumnDef="delete">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Delete </mat-header-cell>
+        
+        <mat-cell *matCellDef="let row">
+        <button mat-raised-button color="warn" (click)="deleteEmployee(row.id)">Delete</button>
+      </mat-cell>
+      </ng-container>  
+      <!-- Phone Column -->
+      <ng-container matColumnDef="phone">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Phone </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.phoneNumber}} </mat-cell>
+      </ng-container>  
+      <!-- Status Column -->
+    <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Status </mat-header-cell>
+        <mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.sts}} </mat-cell>
+      </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;">
+    </mat-row>
+    </mat-table>
+
+</div>
+
+<mat-paginator [pageSize]="10" [length]="totalRecords" [pageSizeOptions]="[5, 10, 25, 100]" (page)="searchWithServerPagi()"></mat-paginator>

@@ -1,0 +1,79 @@
+<p>etek-employee-create works!</p>
+<form [formGroup]="updateForm" novalidate (ngSubmit)="onSubmit()">
+    <mat-card class="shipping-card">
+      <mat-card-header>
+        <mat-card-title>Add New Emirates Employee</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="row">
+
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput #firstName minlength="2" placeholder="First Name" formControlName="firstName" required>
+              <mat-error *ngIf="updateForm.controls['firstName'].hasError('required')">
+                First Name<strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput #lastName minlength="2" placeholder="Last Name" formControlName="lastName" required>
+              <mat-error *ngIf="updateForm.controls['lastName'].hasError('required')">
+                Company <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput placeholder="Company" formControlName="companyName" required>
+              <mat-error *ngIf="updateForm.controls['companyName'].hasError('required')">
+                Company <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput placeholder="Email" formControlName="email" required>
+              <mat-error *ngIf="updateForm.controls['email'].hasError('required')">
+                Email <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+        
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput type="number" placeholder="Product Price" formControlName="salary" required>
+              <mat-error *ngIf="updateForm.controls['salary'].hasError('required')">
+                Salary <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput placeholder="Phone" formControlName="phoneNumber" required>
+              <mat-error *ngIf="updateForm.controls['phoneNumber'].hasError('required')">
+                Phone <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+        </div>
+
+      </mat-card-content>
+      <mat-card-actions style="text-align: left;">
+        <button mat-raised-button color="primary" type="submit" [disabled]="updateForm.invalid">Add</button>
+        <a href="/list" style="padding: 10px;"><button mat-raised-button color="primary" type="button" >Return to list</button></a>
+      </mat-card-actions>
+      <mat-card-content>
+      <div *ngIf="sts >= 0" class="alert alert-danger" role="alert">
+        Alert: {{msg}}
+      </div>
+    </mat-card-content>
+    </mat-card>
+  </form>
