@@ -15,13 +15,15 @@ import { MatInputModule } from '@angular/material/input';
 import { HttpClientModule } from '@angular/common/http';
 import { MatCardModule } from '@angular/material/card';
 import { EtekEmployeeCreateComponent } from './etek-employee-create/etek-employee-create.component';
+import { EtekEmployeeDeleteComponent } from './etek-employee-delete/etek-employee-delete.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     EtekEmployeePagiComponent,
     EtekEmployeeUpdateComponent,
-    EtekEmployeeCreateComponent
+    EtekEmployeeCreateComponent,
+    EtekEmployeeDeleteComponent
   ],
   imports: [
     BrowserModule,

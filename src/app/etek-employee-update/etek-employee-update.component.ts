@@ -51,11 +51,6 @@ export class EtekEmployeeUpdateComponent implements OnInit, AfterViewInit {
 
   onSubmit() {
     console.log('Thanks! ' + JSON.stringify(this.updateForm.value));
-    //this.productService.updateProduct(this.updateForm.value).subscribe((resp) =>{
-     // console.log("response for update product " + resp);
-      //this.router.navigate(["home/products"]);
-    //});
-
     this.etekEmpService.updateEmployee(this.updateForm.value).subscribe((resp) => {
       console.log("response for update product:" + resp.status);
       this.msg = resp.msg;

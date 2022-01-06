@@ -114,7 +114,7 @@ export class EtekEmployeePagiComponent implements OnInit {
   deleteEmployee(id:number){
     console.log('id:' + id);
     console.log('@inside delete');     
-    this.router.navigate(['/update', id]);
+    this.router.navigate(['/delete', id]);
    
   }
 

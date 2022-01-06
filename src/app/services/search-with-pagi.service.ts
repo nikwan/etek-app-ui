@@ -82,4 +82,12 @@ export class SearchWithPagiService {
 
   }
 
+  deleteEmployee(id: number): Observable<EtekResponse> {
+
+    console.log('inside deleteEmployee');
+
+    return this.httpClient.delete<EtekResponse>(this.addEmpUrl + id, {'headers': this.headers});
+
+  }
+
 }

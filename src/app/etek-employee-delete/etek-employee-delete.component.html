@@ -1,0 +1,12 @@
+<p>etek-employee-delete works!</p>
+<form novalidate (ngSubmit)="onSubmit()">
+<mat-card-actions style="text-align: left;">
+    <button mat-raised-button color="primary" type="submit">Delete</button>
+    <a href="/list" style="padding: 10px;"><button mat-raised-button color="primary" type="button" >Return to list</button></a>
+  </mat-card-actions>
+<mat-card-content>
+    <div *ngIf="sts >= 0" class="alert alert-danger" role="alert">
+      Alert: {{msg}}
+    </div>
+  </mat-card-content>
+  </form>
