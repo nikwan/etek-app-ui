@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUrl: "http://localhost:8844/"
+  //apiUrl: "http://localhost:8844/"
+  apiUrl: "http://k8s.ecc.com:8088/ecc-web/"
 };
 
 /*

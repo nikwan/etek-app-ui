@@ -16,6 +16,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatCardModule } from '@angular/material/card';
 import { EtekEmployeeCreateComponent } from './etek-employee-create/etek-employee-create.component';
 import { EtekEmployeeDeleteComponent } from './etek-employee-delete/etek-employee-delete.component';
+import { OtpComponent } from './otp/otp.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -23,7 +27,8 @@ import { EtekEmployeeDeleteComponent } from './etek-employee-delete/etek-employe
     EtekEmployeePagiComponent,
     EtekEmployeeUpdateComponent,
     EtekEmployeeCreateComponent,
-    EtekEmployeeDeleteComponent
+    EtekEmployeeDeleteComponent,
+    OtpComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +42,10 @@ import { EtekEmployeeDeleteComponent } from './etek-employee-delete/etek-employe
     FormsModule,
     MatInputModule,
     MatCardModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatProgressSpinnerModule,
+    MatDividerModule,
+    MatProgressBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

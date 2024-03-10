@@ -1,0 +1,39 @@
+<p>otp works!</p>
+<form [formGroup]="updateForm" novalidate (ngSubmit)="otp()">
+    <mat-card class="shipping-card">
+      <mat-card-header>
+        <mat-card-title>Authenticate ECC</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="row">
+
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput #firstName minlength="2" placeholder="Aadhaar" formControlName="adr" required>
+              <mat-error *ngIf="updateForm.controls['adr'].hasError('required')">
+                Aadhaar<strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+      </mat-card-content>
+      <mat-card-actions style="text-align: left;">
+        <button mat-raised-button color="primary" type="submit" [disabled]="updateForm.invalid">OTP</button>
+        <button mat-raised-button color="warn" type="button">CANCEL</button>
+      </mat-card-actions>
+      <mat-card-content>
+      <div *ngIf="sts >= 1" class="alert alert-danger" role="alert">
+        {{msg}}
+      </div>
+      <div *ngIf="sts == 0" class="alert alert-success" role="alert">
+        {{msg}}
+      </div>
+    </mat-card-content>
+    <mat-card-footer>
+        <div class="spinner-class" *ngIf="isLoading">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+    </mat-card-footer>
+    </mat-card>
+  </form>

@@ -4,13 +4,15 @@ import { EtekEmployeeCreateComponent } from './etek-employee-create/etek-employe
 import { EtekEmployeeDeleteComponent } from './etek-employee-delete/etek-employee-delete.component';
 import { EtekEmployeePagiComponent } from './etek-employee-pagi/etek-employee-pagi.component';
 import { EtekEmployeeUpdateComponent } from './etek-employee-update/etek-employee-update.component';
+import { OtpComponent } from './otp/otp.component';
 
 const routes: Routes = [
   {path: 'list', component: EtekEmployeePagiComponent},
   {path: 'update', component: EtekEmployeeUpdateComponent},
   {path: 'update/:id', component: EtekEmployeeUpdateComponent},
   {path: 'delete/:id', component: EtekEmployeeDeleteComponent},
-  {path: 'add', component: EtekEmployeeCreateComponent}
+  {path: 'add', component: EtekEmployeeCreateComponent},
+  {path: 'otp', component: OtpComponent}
 ];
 
 @NgModule({
