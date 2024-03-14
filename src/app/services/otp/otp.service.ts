@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ApiEndpoints } from 'src/app/constants/api-endpoints';
 import { EccResult } from 'src/app/models/ecc-result';
 import { ECCPoll } from 'src/app/models/eccpoll';
 import { OtpModel } from 'src/app/models/otp.model';
@@ -15,11 +16,6 @@ export class OtpService {
 
   url = "http://localhost:8077/acoustic-search/search-with-get";
   urlPost = "http://localhost:8077/acoustic-search/search-with-post";
-  //urlPost1 = this.baseUrl + "search/search-with-paging";
-  urlotp = environment.apiUrl + "esign/otp";
-  urlotpv = environment.apiUrl + "otpv";
-  urlotpack = environment.apiUrl + "otpack";
-  urlpoll = environment.apiUrl + "poll";
   rid = "123XSDRSS"
 
   //router: Router;
@@ -36,16 +32,23 @@ export class OtpService {
   }
 
   otp(body: OtpModel): Observable<EccResult<OtpModel>> {
-    body.rid = this.rid;
+    //body.rid = this.rid;
     console.log('inside otp');
-    return this.httpClient.post<EccResult<OtpModel>>(this.urlotp, body, {'headers': this.headers});
+    return this.httpClient.post<EccResult<OtpModel>>(ApiEndpoints.otp, body, {'headers': this.headers});
 
   }
 
   poll(type: string): Observable<EccResult<ECCPoll>> {
     //body.rid = this.rid;
     console.log('inside poll');
-    return this.httpClient.post<EccResult<ECCPoll>>(this.urlpoll, {'rid': this.rid, 'type': type}, {'headers': this.headers});
+    return this.httpClient.post<EccResult<ECCPoll>>(ApiEndpoints.poll, {'rid': this.rid, 'type': type}, {'headers': this.headers});
+
+  }
+
+  pollWithInterval(type: string, interval: number, rid: string): Observable<EccResult<ECCPoll>> {
+    //body.rid = this.rid;
+    console.log('inside pollWithInterval');
+    return this.httpClient.post<EccResult<ECCPoll>>(ApiEndpoints.pollPoll, {'rid': rid, 'type': type}, {'headers': this.headers});
 
   }
 }
