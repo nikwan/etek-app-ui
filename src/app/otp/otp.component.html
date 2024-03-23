@@ -1,31 +1,43 @@
-<form [formGroup]="updateForm" novalidate (ngSubmit)="otp()">
-    <mat-card class="shipping-card">
-      <mat-card-header>
+<form [formGroup]="updateForm" novalidate (ngSubmit)="otp()" style="padding: 40px;">
+    <mat-card class="otp-card">
+      <mat-card-header class="custom-mat">
         <mat-card-title>Authenticate ECC</mat-card-title>
+        <mat-card-subtitle>{{aspName}}</mat-card-subtitle>
       </mat-card-header>
+      <img mat-card-sm-image src="./assets/em1.png" alt="eml">
+      <img mat-card-sm-image src="./assets/em2.png" alt="eml" align="right">
       <mat-card-content>
-        <div class="row">
+      <p>This card has divider and indeterminate progress as footer</p>
+      <p>1. Use my Aadhaar/Virtual ID details (as applicable) for the purpose of {{aspName}} for/with {{aspId}} and authenticate my identity through the Aadhaar Authentication system (Aadhaar based e-KYC services of UIDAI) in accordance with the provisions of the Aadhaar (Targeted Delivery of Financial and other Subsidies, 
+        Benefits and Services) Act, 2016 and the allied rules and regulations notified thereunder and for no other purpose.
+      2. Authenticate my Aadhaar / Virtual ID through OTP or Biometric for authenticating my identity through the 
+      Aadhaar Authentication system for obtaining my e-KYC through Aadhaar based e-KYC services of UIDAI 
+      and use my Photo and Demographic details (Name, Gender, Date of Birth and Address) 
+      for the purpose of XXXX for/with XXXX.</p>
 
-          <div class="col">
-            <mat-form-field class="full-width">
-              <input matInput #firstName minlength="2" placeholder="Aadhaar" formControlName="adr" required>
-              <mat-error *ngIf="updateForm.controls['adr'].hasError('required')">
-                Aadhaar<strong>required</strong>
-              </mat-error>
-            </mat-form-field>
-          </div>
-        </div>
+      <mat-form-field class="full-width">
+        <input matInput #firstName minlength="2" placeholder="Aadhaar" type="number" formControlName="adr" required>
+        <mat-error *ngIf="updateForm.controls['adr'].hasError('required')">
+          Aadhaar<strong> required</strong>
+        </mat-error>
+      </mat-form-field>
 
       </mat-card-content>
+
+     
+      <mat-divider></mat-divider>
+      
       <mat-card-actions style="text-align: left;">
-        <button mat-raised-button color="primary" type="submit" [disabled]="updateForm.invalid">OTP</button>
-        <button mat-raised-button color="warn" type="button">CANCEL</button>
+           
+        <button mat-raised-button color="primary" type="submit" [disabled]="updateForm.invalid || isLoading">OTP</button>
+        <button mat-raised-button color="primary" type="button" (click)="cancel()" [disabled]="isLoading">Cancel</button>
+        <a *ngIf="resend" mat-stroked-button color="info" href="/otp/resend" [disabled]="isLoading">Resend OTP</a>
       </mat-card-actions>
       <mat-card-content>
       <div *ngIf="sts >= 1" class="alert alert-danger" role="alert">
         {{msg}}.
       </div>
-      <div *ngIf="sts == 0" class="alert alert-success" role="alert">
+      <div *ngIf="sts == 0" [ngClass]="[exceedAttemptLimit == 2  ? 'alert alert-primary' : exceedAttemptLimit == 3  ? 'alert alert-warning' : 'alert alert-success']" role="alert">
         {{msg}}.
       </div>
     </mat-card-content>

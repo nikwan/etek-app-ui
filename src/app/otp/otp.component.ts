@@ -10,6 +10,7 @@ import { ECCPoll } from '../models/eccpoll';
 import { Subscription, interval, timer } from 'rxjs';
 import { filter, repeat, switchMap, takeUntil, takeWhile } from 'rxjs/operators';
 import { EccResult } from '../models/ecc-result';
+import { ASPDetailsModel } from '../models/otp/aspdetails-model';
 
 @Component({
   selector: 'app-otp',
@@ -26,10 +27,20 @@ export class OtpComponent implements OnInit, OnDestroy {
   repeatAttemptLimit = 5;
   exceedAttemptLimit = 0;
   pollInterval = 3000;
+  otpResendTimeout = 5000;
   rid = '';
+  stillLoading = false;
+  resend = false;
+  //aspDtl: ASPDetailsModel;
+  aspName = '';
+  aspId = '';
+
+  longText = ``;
+  
 
   constructor(private route: ActivatedRoute, private fb:FormBuilder, private etekEmpService: SearchWithPagiService, private otpService: OtpService) { 
     this.eccPoll = {msg: '', rc: 0, sts: 1, ti: '', ec:'',rid: '', type: 'otp'};
+    //this.aspDtl = {};
   }
 
   updateForm = this.fb.group({
@@ -40,11 +51,27 @@ export class OtpComponent implements OnInit, OnDestroy {
 
     
   ngOnInit(): void {
+    this.isLoading = true;
+    this.otpService.esignTest('LGJ8THD1NO1711109764605').subscribe((resp) => {
+      console.log("response esignTest");
+      if(resp.success){
+        this.isLoading = false;
+        this.pollInterval = resp.result.conf.pollInterval;
+        this.otpResendTimeout = resp.result.conf.otpResendTimeout;
+        this.repeatAttemptLimit = resp.result.conf.repeatAttemptLimit;
+        this.aspName = resp.result.aspName;
+        this.aspId = resp.result.aspId;
+      }else{
+        this.isLoading = false;
+        //this.msg = resp.result.msg;
+      }
+           
+    });
   }
 
   ngOnDestroy(): void {
     console.log('ECC POLLING SERVICE DESTROYED');
-    this.timer.unsubscribe();
+    //this.timer.unsubscribe();
   }
 
   onSubmit() {
@@ -102,7 +129,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 
   pollWithInterval(type: string, delay: number, rid: string) {
     console.log('pollWithInterval! ');
-
+    this.resend = false;
     this.timer = timer(2000,delay)
     .pipe(
       switchMap( () => this.otpService.pollWithInterval(type, delay, rid)),
@@ -111,9 +138,17 @@ export class OtpComponent implements OnInit, OnDestroy {
       //filter( d => d.result.)
       )
       .subscribe((resp) => {
-        console.log("_pollWithIntervalotp_success:" + resp.success);
+        console.log("subscribe_success:" + resp.success);
         //this.chkSts(resp);
-      });
+      }).add(
+        () => {
+          console.info('resend time ok:', this.resend);
+          timer(this.otpResendTimeout).subscribe((val) => {
+              console.log('timer to enable resend', val);
+              this.resend = true;
+          });
+      }
+      );
       
     }
 
@@ -136,5 +171,9 @@ export class OtpComponent implements OnInit, OnDestroy {
         this.msg = resp.result.msg;
         return true;
       }
-    }   
+    }
+    
+    cancel(){
+      console.log('cancel:rid' + this.rid);
+    }
 }

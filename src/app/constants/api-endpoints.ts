@@ -12,4 +12,5 @@ export class ApiEndpoints {
     public static otpack: string = ApiEndpoints.server + `otpack`;
     public static poll: string = ApiEndpoints.server + `poll`;
     public static pollPoll: string = ApiEndpoints.server + `poll/poll`;
+    public static esignTest: string = ApiEndpoints.server + `esign/esignTest`;
 }

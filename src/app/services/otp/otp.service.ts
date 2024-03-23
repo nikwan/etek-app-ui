@@ -5,6 +5,7 @@ import { ApiEndpoints } from 'src/app/constants/api-endpoints';
 import { EccResult } from 'src/app/models/ecc-result';
 import { ECCPoll } from 'src/app/models/eccpoll';
 import { OtpModel } from 'src/app/models/otp.model';
+import { ASPDetailsModel } from 'src/app/models/otp/aspdetails-model';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -49,6 +50,12 @@ export class OtpService {
     //body.rid = this.rid;
     console.log('inside pollWithInterval');
     return this.httpClient.post<EccResult<ECCPoll>>(ApiEndpoints.pollPoll, {'rid': rid, 'type': type}, {'headers': this.headers});
+
+  }
+
+  esignTest(rid: string): Observable<EccResult<ASPDetailsModel>> {
+    console.log('inside esignTest');
+    return this.httpClient.post<EccResult<ASPDetailsModel>>(ApiEndpoints.esignTest, rid, {'headers': this.headers});
 
   }
 }
