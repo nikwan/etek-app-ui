@@ -20,6 +20,8 @@ import { OtpComponent } from './otp/otp.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { DemoComponentComponent } from './otp/demo-component/demo-component.component';
+import { DemoParentComponent } from './otp/demo-parent/demo-parent.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     EtekEmployeeUpdateComponent,
     EtekEmployeeCreateComponent,
     EtekEmployeeDeleteComponent,
-    OtpComponent
+    OtpComponent,
+    DemoComponentComponent,
+    DemoParentComponent
   ],
   imports: [
     BrowserModule,

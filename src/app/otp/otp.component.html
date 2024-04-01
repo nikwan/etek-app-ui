@@ -7,13 +7,8 @@
       <img mat-card-sm-image src="./assets/em1.png" alt="eml">
       <img mat-card-sm-image src="./assets/em2.png" alt="eml" align="right">
       <mat-card-content>
-      <p>This card has divider and indeterminate progress as footer</p>
-      <p>1. Use my Aadhaar/Virtual ID details (as applicable) for the purpose of {{aspName}} for/with {{aspId}} and authenticate my identity through the Aadhaar Authentication system (Aadhaar based e-KYC services of UIDAI) in accordance with the provisions of the Aadhaar (Targeted Delivery of Financial and other Subsidies, 
-        Benefits and Services) Act, 2016 and the allied rules and regulations notified thereunder and for no other purpose.
-      2. Authenticate my Aadhaar / Virtual ID through OTP or Biometric for authenticating my identity through the 
-      Aadhaar Authentication system for obtaining my e-KYC through Aadhaar based e-KYC services of UIDAI 
-      and use my Photo and Demographic details (Name, Gender, Date of Birth and Address) 
-      for the purpose of XXXX for/with XXXX.</p>
+      <p>Transaction Ref No <strong>{{txn}}</strong></p>
+      <p align="justify">{{lt}}</p>
 
       <mat-form-field class="full-width">
         <input matInput #firstName minlength="2" placeholder="Aadhaar" type="number" formControlName="adr" required>
@@ -35,7 +30,7 @@
       </mat-card-actions>
       <mat-card-content>
       <div *ngIf="sts >= 1" class="alert alert-danger" role="alert">
-        {{msg}}.
+        {{msg}}
       </div>
       <div *ngIf="sts == 0" [ngClass]="[exceedAttemptLimit == 2  ? 'alert alert-primary' : exceedAttemptLimit == 3  ? 'alert alert-warning' : 'alert alert-success']" role="alert">
         {{msg}}.

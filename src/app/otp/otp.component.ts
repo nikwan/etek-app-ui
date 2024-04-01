@@ -7,10 +7,11 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { ECCPoll } from '../models/eccpoll';
-import { Subscription, interval, timer } from 'rxjs';
+import { Subscription, interval, throwError, timer } from 'rxjs';
 import { filter, repeat, switchMap, takeUntil, takeWhile } from 'rxjs/operators';
 import { EccResult } from '../models/ecc-result';
 import { ASPDetailsModel } from '../models/otp/aspdetails-model';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-otp',
@@ -34,8 +35,10 @@ export class OtpComponent implements OnInit, OnDestroy {
   //aspDtl: ASPDetailsModel;
   aspName = '';
   aspId = '';
-
   longText = ``;
+  errMsg = 'error ocurred while processing requests';
+  lt = ``;
+  txn = '';
   
 
   constructor(private route: ActivatedRoute, private fb:FormBuilder, private etekEmpService: SearchWithPagiService, private otpService: OtpService) { 
@@ -52,7 +55,7 @@ export class OtpComponent implements OnInit, OnDestroy {
     
   ngOnInit(): void {
     this.isLoading = true;
-    this.otpService.esignTest('LGJ8THD1NO1711109764605').subscribe((resp) => {
+    this.otpService.esignTest('OCLLP7BKDF1711973836425').subscribe((resp) => {
       console.log("response esignTest");
       if(resp.success){
         this.isLoading = false;
@@ -61,12 +64,14 @@ export class OtpComponent implements OnInit, OnDestroy {
         this.repeatAttemptLimit = resp.result.conf.repeatAttemptLimit;
         this.aspName = resp.result.aspName;
         this.aspId = resp.result.aspId;
+        this.lt = resp.result.lt;
+        this.txn = resp.result.txn;
       }else{
         this.isLoading = false;
         //this.msg = resp.result.msg;
       }
            
-    });
+    }, (err) => {this.handleError(err);}) ;
   }
 
   ngOnDestroy(): void {
@@ -175,5 +180,24 @@ export class OtpComponent implements OnInit, OnDestroy {
     
     cancel(){
       console.log('cancel:rid' + this.rid);
+    }
+
+    private handleError(error: HttpErrorResponse) {
+      this.isLoading = false;
+      this.msg = this.errMsg;
+      this.sts = 99;
+      if (error.status === 0) {
+        // A client-side or network error occurred. Handle it accordingly.
+        console.error('An error occurred:', error.error);
+      } else if(error.status === 401){
+        this.msg = 'unauthorised operation performed!';
+      }else {
+        // The backend returned an unsuccessful response code.
+        // The response body may contain clues as to what went wrong.
+        console.error(
+          `Backend returned code ${error.status}, body was: `, error.error);
+      }
+      // Return an observable with a user-facing error message.
+      return throwError(() => new Error('Something bad happened; please try again later.'));
     }
 }
