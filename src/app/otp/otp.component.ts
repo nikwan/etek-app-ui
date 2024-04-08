@@ -29,7 +29,7 @@ export class OtpComponent implements OnInit, OnDestroy {
   exceedAttemptLimit = 0;
   pollInterval = 3000;
   otpResendTimeout = 5000;
-  rid = '';
+  rid = 'SGGVHEMQNY1712566322359';
   stillLoading = false;
   resend = false;
   //aspDtl: ASPDetailsModel;
@@ -47,16 +47,17 @@ export class OtpComponent implements OnInit, OnDestroy {
   }
 
   updateForm = this.fb.group({
-    adr: ['', Validators.required]
-    //lastName: ['', Validators.required],
+    adr: ['', Validators.required],
+    rid: ['', Validators.required]
     
   });
 
     
   ngOnInit(): void {
     this.isLoading = true;
-    this.otpService.esignTest('OCLLP7BKDF1711973836425').subscribe((resp) => {
+    this.otpService.esignTest(this.rid).subscribe((resp) => {
       console.log("response esignTest");
+      this.updateForm.controls['rid'].setValue(this.rid);
       if(resp.success){
         this.isLoading = false;
         this.pollInterval = resp.result.conf.pollInterval;
@@ -160,7 +161,7 @@ export class OtpComponent implements OnInit, OnDestroy {
     chkSts(resp: EccResult<ECCPoll>) {
       console.log('pollWithInterval:sts' + resp.result.sts);
       this.exceedAttemptLimit++;
-      if(resp.result.sts === 0){
+      if(resp.result.sts === 1){
         this.msg = resp.result.msg + ' Attempt(s) remaining for OTP is ' + resp.result.rc;
         this.sts = resp.result.sts;
         this.eccPoll = resp.result;
@@ -168,7 +169,7 @@ export class OtpComponent implements OnInit, OnDestroy {
         return false;          
       }else if(this.exceedAttemptLimit > this.repeatAttemptLimit){
         this.msg = "seems taking longer than expeceted! do you want to check the status again? please click here"
-        this.sts = 1;
+        this.sts = 0;
         this.isLoading = false;
         return false;
       }else{
@@ -185,7 +186,7 @@ export class OtpComponent implements OnInit, OnDestroy {
     private handleError(error: HttpErrorResponse) {
       this.isLoading = false;
       this.msg = this.errMsg;
-      this.sts = 99;
+      this.sts = 0;
       if (error.status === 0) {
         // A client-side or network error occurred. Handle it accordingly.
         console.error('An error occurred:', error.error);
