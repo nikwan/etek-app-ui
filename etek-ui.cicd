@@ -1,0 +1,131 @@
+pipeline {
+    agent {
+        kubernetes {
+            inheritFrom 'ecc'
+            defaultContainer 'node14'
+        }
+    }
+    //global env
+    environment { 
+                gitBranch = 'develop';
+                refsb = "${env.refsb != null ? env.refsb : 'develop'}";
+                hrefr = "${env.hrefr != null ? env.hrefr : env.SVN_URL + '/ecc.git'}";
+                pprtype = "${env.pprtype}";
+                eventKey = "${env.eventKey}";
+                TYPE = "${env.type}";
+                DEPLOY_K8S = false;
+    }
+    stages {
+        stage('Cleanup'){
+            steps{
+                // Clean before build
+                //cleanWs()
+                echo "cleanWs:enabled"
+            }
+        }
+        stage('set-env') {
+            steps {
+                script{
+                withCredentials([gitUsernamePassword(credentialsId: 'ecc-git-pat-cred', gitToolName: 'git-tool')]) {
+                    echo "branch:${env.refsb}"
+                    echo "repo:${env.hrefr}"
+                    sh "mvn -v"
+                    //sh "git clone -b $gitBranch $SVN_URL/ecc.git"
+                    echo 'checkout ecc'
+                    if(TYPE == 'TAG'){
+                        DEPLOY_K8S = true;
+                        //sh "git clone -b $gitBranch $hrefr"
+                        dir('ecc'){
+                            //sh "git checkout tags/$refsb -b $refsb"
+                            sh "cat README.md"
+                        }
+                    }else{
+                        //sh "git clone -b $refsb $hrefr"
+                        //sh "git checkout -f $GIT_COMMIT"
+                        
+                        DEPLOY_K8S = false;
+                        sh "pwd"
+                        sh "ls -ltr"
+                        //dir('ecc'){
+                        	echo "GIT_COMMIT:$GIT_COMMIT"
+                        	echo "GIT_BRANCH:$GIT_BRANCH"
+                        	sh "printenv"
+                        	sh "pwd"
+                        	sh "ls -ltr"
+                        	//sh "cat README.md"
+                        	sh "git checkout $GIT_COMMIT"
+                        //}
+                        
+                    }
+                }
+                
+                }
+               
+            }
+        }
+        stage('setup-npm-k8s'){
+            steps{
+                dir('etek-app-ui'){
+                	sh "ls -l"
+                    //sh "cp  ${env.JENKINS_AGENT_WORKDIR}/workspace/${env.JOB_NAME}/ecc/k8s/apps/build/ecc-test/ecc-test-dockerfile ${env.JENKINS_AGENT_WORKDIR}/workspace/${env.JOB_NAME}/ecc-test-app/"
+                    //sh "cp  ${env.JENKINS_AGENT_WORKDIR}/workspace/${env.JOB_NAME}/ecc/k8s/apps/build/ecc-test/ecc-test.yml ${env.JENKINS_AGENT_WORKDIR}/workspace/${env.JOB_NAME}/ecc-test-app/"
+                }
+            }
+        }
+        stage('Build ETEK UI') {
+            steps {
+                script{
+                    dir('etek-app-ui'){
+                        sh "npm run build -- --output-path=./dist/out --configuration development --output-hashing=all --base-href /etek-app-ui/"
+                    }
+                }
+            }
+        }
+        stage('Build Image') {
+            steps {
+                script{
+                    dir('etek-app-ui'){
+                        COMMIT_ID = sh(returnStdout: true, 
+                        script: 'git rev-list --tags --date-order | head -1').trim()
+                        echo "commitId:${COMMIT_ID}"
+                        
+                        DOCKER_TAG = sh(returnStdout: true,
+                        script: "git show-ref --tags | grep '${COMMIT_ID}' | awk -F /  \'{print  \$NF}\'").trim()
+                        DOCKER_TAG = "v${BUILD_NUMBER}"
+                        DEPLOY_K8S = false;
+                        echo "DOCKER_TAG:${DOCKER_TAG}"
+                        echo "DEPLOY_K8S:${DEPLOY_K8S}"
+                        
+                        if(DEPLOY_K8S){
+                            echo "creating container image..."
+                            container('docker'){
+                                sh "docker build -f Dockerfile -t ${DOCKER_REPO}/etek-app-ui:${DOCKER_TAG} ."
+                                sh "docker push ${DOCKER_REPO}/etek-app-ui:${DOCKER_TAG}"
+                            }
+                            echo "pushing container image..."
+                        }
+                    }
+                }
+            }
+        }
+        stage('Deploy K8s'){
+            steps{
+                script{
+                dir('etek-app-ui'){
+                    echo "commitId:${COMMIT_ID}"
+                    echo "tag:${DOCKER_TAG}"
+                    
+                    if(DEPLOY_K8S){
+                        echo "deploying ecc test ..."
+                        container('kubectl'){
+     					sh 'kubectl version'
+                        sh "cat ecc-test.yml | sed -e 's/\${DOCKER_REPO}/'$DOCKER_REPO'/g;s/\${DOCKER_TAG}/'$DOCKER_TAG'/g' | kubectl -n ecc apply -f -"
+                        }
+                        echo "deploying ecc test finished..."
+                    }
+                }
+            }
+            }
+        }
+    }
+}
