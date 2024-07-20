@@ -69,7 +69,7 @@ pipeline {
                         if(DEPLOY_K8S){
                             echo "creating container image..."
                             container('docker'){
-                                sh "docker build -f Dockerfile -t ${DOCKER_REPO}/etek-app-ui:${DOCKER_TAG} ."
+                                sh "docker build -t ${DOCKER_REPO}/etek-app-ui:${DOCKER_TAG} ."
                                 sh "docker push ${DOCKER_REPO}/etek-app-ui:${DOCKER_TAG}"
                             }
                             echo "pushing container image..."

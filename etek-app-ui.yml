@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: etek-app-ui
-        image: ${DOCKER_REPO}/etel-app-ui:${DOCKER_TAG}
+        image: ${DOCKER_REPO}/etek-app-ui:${DOCKER_TAG}
         imagePullPolicy: Always
         ports:
           - containerPort: 80
