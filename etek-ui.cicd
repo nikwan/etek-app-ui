@@ -43,6 +43,7 @@ pipeline {
             steps {
                 script{
                     dir('etek-app-ui'){
+                    	sh "node --version"
                     	sh "npm install"
                     	sh "npm -v"
                         sh "npm run build -- --output-path=./dist/out --configuration development --output-hashing=all --base-href /etek-app-ui/"
@@ -61,7 +62,7 @@ pipeline {
                         DOCKER_TAG = sh(returnStdout: true,
                         script: "git show-ref --tags | grep '${COMMIT_ID}' | awk -F /  \'{print  \$NF}\'").trim()
                         DOCKER_TAG = "v${BUILD_NUMBER}"
-                        DEPLOY_K8S = false;
+                        DEPLOY_K8S = true;
                         echo "DOCKER_TAG:${DOCKER_TAG}"
                         echo "DEPLOY_K8S:${DEPLOY_K8S}"
                         
@@ -88,7 +89,7 @@ pipeline {
                         echo "deploying ecc test ..."
                         container('kubectl'){
      					sh 'kubectl version'
-                        sh "cat ecc-test.yml | sed -e 's/\${DOCKER_REPO}/'$DOCKER_REPO'/g;s/\${DOCKER_TAG}/'$DOCKER_TAG'/g' | kubectl -n ecc apply -f -"
+                        sh "cat etek-app-ui.yml | sed -e 's/\${DOCKER_REPO}/'$DOCKER_REPO'/g;s/\${DOCKER_TAG}/'$DOCKER_TAG'/g' | kubectl -n ecc apply -f -"
                         }
                         echo "deploying ecc test finished..."
                     }

@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: etek-app-ui
+  labels:
+    app: etek-app-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: etek-app-ui
+  template:
+    metadata:
+      labels:
+        app: etek-app-ui
+    spec:
+      containers:
+      - name: etek-app-ui
+        image: ${DOCKER_REPO}/etel-app-ui:${DOCKER_TAG}
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 80
+            name: http
+        envFrom:
+            - configMapRef:
+                name: ecc-global-cm
+            - secretRef:
+                name: ecc-secrets
+        env:
+          - name: EUREKA_SERVER_ADDRESS
+            valueFrom:
+                configMapKeyRef:
+                  name: ecc-registry-cm
+                  key: eureka_service_address
+          - name: TZ
+            value: "Asia/Calcutta"              
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: etek-app-ui-svc
+  labels:
+    app: etek-app-ui
+spec:
+  selector:
+    app: etek-app-ui
+  ports:
+  - port: 80
+    targetPort: 80
+    name: http
