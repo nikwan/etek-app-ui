@@ -26,38 +26,8 @@ pipeline {
         stage('set-env') {
             steps {
                 script{
-                withCredentials([gitUsernamePassword(credentialsId: 'ecc-git-pat-cred', gitToolName: 'git-tool')]) {
-                    echo "branch:${env.refsb}"
-                    echo "repo:${env.hrefr}"
-                    sh "mvn -v"
-                    echo 'checkout ecc'
-                    if(TYPE == 'TAG'){
-                        DEPLOY_K8S = true;
-                        //sh "git clone -b $gitBranch $hrefr"
-                        dir('ecc'){
-                            //sh "git checkout tags/$refsb -b $refsb"
-                            sh "cat README.md"
-                        }
-                    }else{
-                        
-                        DEPLOY_K8S = false;
-                        sh "pwd"
-                        sh "ls -ltr"
-                        //dir('ecc'){
-                        	echo "GIT_COMMIT:$GIT_COMMIT"
-                        	echo "GIT_BRANCH:$GIT_BRANCH"
-                        	sh "printenv"
-                        	sh "pwd"
-                        	sh "ls -ltr"
-                        	//sh "cat README.md"
-                        	sh "git checkout $GIT_COMMIT"
-                        //}
-                        
-                    }
+               	sh "ls -l"
                 }
-                
-                }
-               
             }
         }
         stage('setup-npm-k8s'){
