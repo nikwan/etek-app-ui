@@ -13,7 +13,7 @@ const routes: Routes = [
   {path: 'update/:id', component: EtekEmployeeUpdateComponent},
   {path: 'delete/:id', component: EtekEmployeeDeleteComponent},
   {path: 'add', component: EtekEmployeeCreateComponent},
-  {path: 'otp', component: OtpComponent},
+  {path: 'otp/:rid', component: OtpComponent},
   {path: 'comp', component: DemoParentComponent}
 ];
 

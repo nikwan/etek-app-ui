@@ -22,6 +22,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { DemoComponentComponent } from './otp/demo-component/demo-component.component';
 import { DemoParentComponent } from './otp/demo-parent/demo-parent.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatIconModule} from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -49,7 +51,9 @@ import { DemoParentComponent } from './otp/demo-parent/demo-parent.component';
     ReactiveFormsModule,
     MatProgressSpinnerModule,
     MatDividerModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatCheckboxModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]

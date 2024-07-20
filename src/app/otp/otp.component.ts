@@ -12,6 +12,7 @@ import { filter, repeat, switchMap, takeUntil, takeWhile } from 'rxjs/operators'
 import { EccResult } from '../models/ecc-result';
 import { ASPDetailsModel } from '../models/otp/aspdetails-model';
 import { HttpErrorResponse } from '@angular/common/http';
+import {MatIconModule} from '@angular/material/icon';
 
 @Component({
   selector: 'app-otp',
@@ -29,7 +30,7 @@ export class OtpComponent implements OnInit, OnDestroy {
   exceedAttemptLimit = 0;
   pollInterval = 3000;
   otpResendTimeout = 5000;
-  rid = 'SGGVHEMQNY1712566322359';
+  rid: any = '';
   stillLoading = false;
   resend = false;
   //aspDtl: ASPDetailsModel;
@@ -39,21 +40,28 @@ export class OtpComponent implements OnInit, OnDestroy {
   errMsg = 'error ocurred while processing requests';
   lt = ``;
   txn = '';
+  con = false;
+  hide = true;
+  otpSent = false;
   
 
   constructor(private route: ActivatedRoute, private fb:FormBuilder, private etekEmpService: SearchWithPagiService, private otpService: OtpService) { 
     this.eccPoll = {msg: '', rc: 0, sts: 1, ti: '', ec:'',rid: '', type: 'otp'};
+    this.rid = '';
     //this.aspDtl = {};
   }
 
   updateForm = this.fb.group({
     adr: ['', Validators.required],
-    rid: ['', Validators.required]
+    rid: ['', Validators.required],
+    con: [true, Validators.required],
+    otp: ['']
     
   });
 
     
   ngOnInit(): void {
+    this.rid = this.route.snapshot.paramMap.get('rid');
     this.isLoading = true;
     this.otpService.esignTest(this.rid).subscribe((resp) => {
       console.log("response esignTest");
@@ -162,10 +170,11 @@ export class OtpComponent implements OnInit, OnDestroy {
       console.log('pollWithInterval:sts' + resp.result.sts);
       this.exceedAttemptLimit++;
       if(resp.result.sts === 1){
-        this.msg = resp.result.msg + ' Attempt(s) remaining for OTP is ' + resp.result.rc;
+        this.msg = resp.result.msg + ' Attempt(s) remaining for OTP is ' + (this.repeatAttemptLimit - resp.result.rc);
         this.sts = resp.result.sts;
         this.eccPoll = resp.result;
         this.isLoading = false;
+        this.otpSent = true;
         return false;          
       }else if(this.exceedAttemptLimit > this.repeatAttemptLimit){
         this.msg = "seems taking longer than expeceted! do you want to check the status again? please click here"
@@ -181,6 +190,27 @@ export class OtpComponent implements OnInit, OnDestroy {
     
     cancel(){
       console.log('cancel:rid' + this.rid);
+    }
+
+    submit(){
+      console.log('submit:rid' + this.rid);
+      this.exceedAttemptLimit = 0;
+      this.otpService.submit(this.updateForm.value).subscribe((resp) => {
+      console.log("otpv_success:" + resp.success);
+      this.isLoading = true;
+      
+      if(resp.success){
+        this.msg = resp.result.msg;
+        this.sts = resp.result.sts;
+        this.rid = resp.result.rid;
+        //this.poll('otp');
+        this.pollWithInterval('otpv', this.pollInterval, this.rid);
+      }else{
+        this.msg = resp.result.msg;
+        this.sts = resp.result.sts;
+      }
+      
+    });
     }
 
     private handleError(error: HttpErrorResponse) {

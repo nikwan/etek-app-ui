@@ -8,7 +8,7 @@ export class ApiEndpoints {
     public static createCaptcha: string = ApiEndpoints.server + `/captcha/create`;
 
     public static otp: string = ApiEndpoints.server + `esign/otp`;
-    public static otpv: string = ApiEndpoints.server + `otpv`;
+    public static otpv: string = ApiEndpoints.server + `esign/otpv`;
     public static otpack: string = ApiEndpoints.server + `otpack`;
     public static poll: string = ApiEndpoints.server + `poll`;
     public static pollPoll: string = ApiEndpoints.server + `poll/poll`;

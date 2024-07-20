@@ -1,24 +1,45 @@
+<!-- Header Component Section -->
+
+<!-- Text Component Section -->
 <form [formGroup]="updateForm" novalidate (ngSubmit)="otp()" style="padding: 40px;">
     <mat-card class="otp-card">
       <mat-card-header class="custom-mat">
         <mat-card-title>Authenticate ECC</mat-card-title>
         <mat-card-subtitle>{{aspName}}</mat-card-subtitle>
       </mat-card-header>
-      <img mat-card-sm-image src="./assets/em1.png" alt="eml">
-      <img mat-card-sm-image src="./assets/em2.png" alt="eml" align="right">
+      <img mat-card-sm-image src="./assets/em1.png" alt="ECC_ESP_IMG">
+      <img mat-card-sm-image src="./assets/em2.png" alt="ECC_ASP_IMG" align="right">
       <mat-card-content>
       <p>Transaction Ref No <strong>{{txn}}</strong></p>
+      <mat-checkbox class="example-margin" formControlName="con" required>I Agree to</mat-checkbox>
+      <mat-error *ngIf="updateForm.controls['con'].hasError('required')">
+        Consent<strong> required</strong>
+      </mat-error>
       <p align="justify">{{lt}}</p>
 
-      <mat-form-field class="full-width">
+      <!-- OTP Component Section -->
+      <div *ngIf="!otpSent">
+      <mat-form-field>
         <input matInput #firstName minlength="2" placeholder="Aadhaar" type="number" formControlName="adr" required>
         <mat-error *ngIf="updateForm.controls['adr'].hasError('required')">
           Aadhaar<strong> required</strong>
         </mat-error>
       </mat-form-field>
+     </div>
+      <mat-form-field>
+        <mat-label>Enter OTP</mat-label>
+        <input matInput [type]="hide ? 'password' : 'text'"/>
+        <mat-error *ngIf="updateForm.controls['otp'].hasError('required')">
+          OTP<strong> required</strong>
+        </mat-error>
+        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+      </mat-form-field>
 
       </mat-card-content>
 
+      
      
       <mat-divider></mat-divider>
       
@@ -27,6 +48,7 @@
         <button mat-raised-button color="primary" type="submit" [disabled]="updateForm.invalid || isLoading">OTP</button>
         <button mat-raised-button color="primary" type="button" (click)="cancel()" [disabled]="isLoading">Cancel</button>
         <a *ngIf="resend" mat-stroked-button color="info" href="/otp/resend" [disabled]="isLoading">Resend OTP</a>
+        <button *ngIf="otpSent" mat-raised-button color="primary" type="button" (click)="submit()" [disabled]="isLoading">Submit</button>
       </mat-card-actions>
       <mat-card-content>
       <div *ngIf="sts == 0" class="alert alert-danger" role="alert">
