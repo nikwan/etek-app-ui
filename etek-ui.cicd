@@ -40,8 +40,6 @@ pipeline {
                             sh "cat README.md"
                         }
                     }else{
-                        //sh "git clone -b $refsb $hrefr"
-                        //sh "git checkout -f $GIT_COMMIT"
                         
                         DEPLOY_K8S = false;
                         sh "pwd"
