@@ -43,6 +43,8 @@ pipeline {
             steps {
                 script{
                     dir('etek-app-ui'){
+                    	sh "npm install"
+                    	sh "npm -v"
                         sh "npm run build -- --output-path=./dist/out --configuration development --output-hashing=all --base-href /etek-app-ui/"
                     }
                 }
