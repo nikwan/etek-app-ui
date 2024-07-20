@@ -30,7 +30,6 @@ pipeline {
                     echo "branch:${env.refsb}"
                     echo "repo:${env.hrefr}"
                     sh "mvn -v"
-                    //sh "git clone -b $gitBranch $SVN_URL/ecc.git"
                     echo 'checkout ecc'
                     if(TYPE == 'TAG'){
                         DEPLOY_K8S = true;
