@@ -46,7 +46,7 @@ pipeline {
                     	sh "node --version"
                     	sh "npm install"
                     	sh "npm -v"
-                        sh "npm run build -- --output-path=./dist/out --configuration development --output-hashing=all --base-href /etek-app-ui/"
+                        sh "npm run build -- --output-path=./dist/out --configuration uat --output-hashing=all --base-href /etek-app-ui/"
                         sh "ls -l"
                 }
             }
