@@ -32,7 +32,7 @@ spec:
             valueFrom:
                 configMapKeyRef:
                   name: ecc-registry-cm
-                  key: eureka_service_address
+                  key: EUREKA_SERVER_ADDRESS
           - name: TZ
             value: "Asia/Calcutta"              
 ---
