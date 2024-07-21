@@ -75,16 +75,15 @@ pipeline {
         stage('Deploy K8s'){
             steps{
                 script{
-                    echo "commitId:${COMMIT_ID}"
                     echo "tag:${DOCKER_TAG}"
                     
                     if(DEPLOY_K8S){
-                        echo "deploying ecc test ..."
+                        echo "deploying etek-app-ui test ..."
                         container('kubectl'){
      					sh 'kubectl version'
                         sh "cat etek-app-ui.yml | sed -e 's/\${DOCKER_REPO}/'$DOCKER_REPO'/g;s/\${DOCKER_TAG}/'$DOCKER_TAG'/g' | kubectl -n ecc apply -f -"
                         }
-                        echo "deploying ecc test finished..."
+                        echo "deploying etek-app-ui finished..."
                     }
             }
             }
