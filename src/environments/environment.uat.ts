@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: "http://34.16.206.189/ecc-web/"
+  apiUrl: "https://ecc.allspark.co.in/ecc-web/"
 };
 
 /*
