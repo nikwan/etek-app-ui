@@ -5,4 +5,5 @@ export interface OtpModel {
     msg: string;
     token: string;
     rid: string;
+    otp: string;
 }

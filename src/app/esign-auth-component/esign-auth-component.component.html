@@ -1,0 +1,24 @@
+<div style="max-width: 600px;">
+<mat-card class="otp-card">
+    <mat-card-header class="custom-mat">
+      <mat-card-title>Authenticate ECC</mat-card-title>
+      <mat-card-subtitle>{{msg}} :: {{sts}}</mat-card-subtitle>
+    </mat-card-header>
+    <div *ngIf="sts == 0">
+        <img mat-card-xl-image src="./assets/1.png" alt="ECC_ESP_IMG1">
+    </div>
+    <div *ngIf="sts == 1">
+        <img mat-card-xl-image src="./assets/2.png" alt="ECC_ESP_IMG1">
+    </div>
+    <div *ngIf="sts == 3">
+        <img mat-card-xl-image src="./assets/3.png" alt="ECC_ESP_IMG2">
+    </div>
+    
+    <mat-card-footer>
+        <div class="spinner-class" *ngIf="isLoading">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+    </mat-card-footer>
+</mat-card>
+</div>
+    

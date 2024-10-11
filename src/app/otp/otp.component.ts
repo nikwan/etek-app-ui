@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SearchWithPagiService } from '../services/search-with-pagi.service';
 import { OtpService } from '../services/otp/otp.service';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
@@ -45,14 +45,15 @@ export class OtpComponent implements OnInit, OnDestroy {
   otpSent = false;
   
 
-  constructor(private route: ActivatedRoute, private fb:FormBuilder, private etekEmpService: SearchWithPagiService, private otpService: OtpService) { 
+  constructor(private router: Router, private route: ActivatedRoute, private fb:FormBuilder, private etekEmpService: SearchWithPagiService, private otpService: OtpService) { 
     this.eccPoll = {msg: '', rc: 0, sts: 1, ti: '', ec:'',rid: '', type: 'otp'};
     this.rid = '';
-    //this.aspDtl = {};
+    this.rid = this.router.getCurrentNavigation()?.extras.state?.rid;
+    console.log('state_rid:{}', this.rid);
   }
 
   updateForm = this.fb.group({
-    adr: ['', Validators.required],
+    adr: ['932359036527', Validators.required],
     rid: ['', Validators.required],
     con: [true, Validators.required],
     otp: ['']
@@ -61,7 +62,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 
     
   ngOnInit(): void {
-    this.rid = this.route.snapshot.paramMap.get('rid');
+    //this.rid = this.route.snapshot.paramMap.get('rid');
     this.isLoading = true;
     this.otpService.esignTest(this.rid).subscribe((resp) => {
       console.log("response esignTest");
@@ -202,7 +203,7 @@ export class OtpComponent implements OnInit, OnDestroy {
       if(resp.success){
         this.msg = resp.result.msg;
         this.sts = resp.result.sts;
-        this.rid = resp.result.rid;
+        //this.rid = resp.result.rid;
         //this.poll('otp');
         this.pollWithInterval('otpv', this.pollInterval, this.rid);
       }else{
@@ -210,7 +211,7 @@ export class OtpComponent implements OnInit, OnDestroy {
         this.sts = resp.result.sts;
       }
       
-    });
+    }, (err) => {this.handleError(err);}) ;
     }
 
     private handleError(error: HttpErrorResponse) {

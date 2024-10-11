@@ -24,6 +24,7 @@ import { DemoComponentComponent } from './otp/demo-component/demo-component.comp
 import { DemoParentComponent } from './otp/demo-parent/demo-parent.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatIconModule} from '@angular/material/icon';
+import { EsignAuthComponentComponent } from './esign-auth-component/esign-auth-component.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import {MatIconModule} from '@angular/material/icon';
     EtekEmployeeDeleteComponent,
     OtpComponent,
     DemoComponentComponent,
-    DemoParentComponent
+    DemoParentComponent,
+    EsignAuthComponentComponent
   ],
   imports: [
     BrowserModule,

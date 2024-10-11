@@ -62,6 +62,7 @@ export class OtpService {
   submit(body: OtpModel): Observable<EccResult<OtpModel>> {
     //body.rid = this.rid;
     console.log('inside submit');
+    console.debug('otp:' + body.otp);
     return this.httpClient.post<EccResult<OtpModel>>(ApiEndpoints.otpv, body, {'headers': this.headers});
 
   }

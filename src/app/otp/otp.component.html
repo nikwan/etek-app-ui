@@ -20,7 +20,7 @@
       <!-- OTP Component Section -->
       <div *ngIf="!otpSent">
       <mat-form-field>
-        <input matInput #firstName minlength="2" placeholder="Aadhaar" type="number" formControlName="adr" required>
+        <input matInput minlength="2" placeholder="Aadhaar" type="number" formControlName="adr" required>
         <mat-error *ngIf="updateForm.controls['adr'].hasError('required')">
           Aadhaar<strong> required</strong>
         </mat-error>
@@ -28,7 +28,7 @@
      </div>
       <mat-form-field>
         <mat-label>Enter OTP</mat-label>
-        <input matInput [type]="hide ? 'password' : 'text'"/>
+        <input matInput [type]="hide ? 'password' : 'text'" formControlName="otp"/>
         <mat-error *ngIf="updateForm.controls['otp'].hasError('required')">
           OTP<strong> required</strong>
         </mat-error>
