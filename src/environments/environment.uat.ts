@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUrl: "https://ecc.allspark.co.in/ecc-web/"
+  apiUrl: "https://ecc.allspark.co.in/ecc-web/",
+  pollApiUrl: "https://ecc.allspark.co.in/ecc-poll/"
 };
 
 /*

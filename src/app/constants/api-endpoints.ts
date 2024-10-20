@@ -1,7 +1,7 @@
 import { environment } from "src/environments/environment";
 
 export class ApiEndpoints {
-    public static poll_auth = 'http://localhost:9999/ecc-poll/auth';
+    public static poll_auth = environment.pollApiUrl + '/auth';
     public static server = environment.apiUrl;
 
     public static getCaptchaChallenge: string = ApiEndpoints.server + `/captcha/challenge`;

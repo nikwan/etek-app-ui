@@ -49,7 +49,7 @@ export class OtpComponent implements OnInit, OnDestroy {
     this.eccPoll = {msg: '', rc: 0, sts: 1, ti: '', ec:'',rid: '', type: 'otp'};
     this.rid = '';
     this.rid = this.router.getCurrentNavigation()?.extras.state?.rid;
-    console.log('state_rid:{}', this.rid);
+    console.log('state_rid:', this.rid);
   }
 
   updateForm = this.fb.group({

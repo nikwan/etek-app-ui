@@ -5,7 +5,13 @@
 export const environment = {
   production: false,
   //apiUrl: "http://localhost:8844/"
-  apiUrl: "http://k8s.ecc.com:8088/ecc-web/"
+  //apiUrl: "http://k8s.ecc.com:8088/ecc-web/",
+  
+  //apiUrl: "http://k8s.ecc.com:8088/ecc-web/",
+  //pollApiUrl: "http://k8s.ecc.com:8088/ecc-poll/"
+
+  apiUrl: "https://ecc.allspark.co.in/ecc-web/",
+  pollApiUrl: "https://ecc.allspark.co.in/ecc-poll/"
 };
 
 /*
